@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Task Manager (Beta)</title>
+
+<style>
+    body {
+        font-family: Arial;
+        background: #f4f6f9;
+        display: flex;
+        justify-content: center;
+        padding-top: 50px;
+    }
+
+    .app {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        width: 380px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    h2 { text-align: center; }
+
+    input, select {
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+    }
+
+    button {
+        padding: 10px;
+        border: none;
+        background: #4c6baf;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 20px;
+    }
+
+    li {
+        padding: 10px;
+        margin-bottom: 10px;
+        background: #eee;
+        border-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .completed {
+        text-decoration: line-through;
+        color: gray;
+    }
+
+    .high { border-left: 5px solid red; }
+    .medium { border-left: 5px solid orange; }
+    .low { border-left: 5px solid green; }
+
+    .delete {
+        background: red;
+        padding: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        color: white;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="app">
+    <h2>Task Manager (Beta)</h2>
+
+    <input type="text" id="taskInput" placeholder="Enter task"><br>
+    <p id="errorMsg" style="color:red; font-size:14px; margin-top:5px;"></p>
+
+    <select id="priority">
+        <option value="low">Low Priority</option>
+        <option value="medium">Medium Priority</option>
+        <option value="high">High Priority</option>
+    </select><br>
+
+    <button onclick="addTask()">Add Task</button>
+
+    <ul id="taskList"></ul>
+    <h3>Feedback</h3>
+
+<form action="https://formspree.io/f/mlgpqnel" method="POST">
+    
+    <textarea 
+        name="feedback" 
+        placeholder="Enter your feedback here..." 
+        required
+        style="width:90%; height:80px; padding:10px; border-radius:6px; border:1px solid #ccc;">
+    </textarea><br><br>
+
+    <input 
+        type="email" 
+        name="email" 
+        placeholder="Your email (optional)"
+        style="width:90%; padding:10px; border-radius:6px; border:1px solid #ccc;">
+    <br><br>
+
+    <button type="submit">Submit Feedback</button>
+</form>
+</div>
+
+
+
+<script>
+let tasks = [];
+
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function loadTasks() {
+    let stored = localStorage.getItem("tasks");
+    if (stored) {
+        tasks = JSON.parse(stored);
+        tasks.forEach(t => renderTask(t.text, t.priority, t.completed));
+    }
+}
+
+function addTask() {
+    let input = document.getElementById("taskInput");
+    let priority = document.getElementById("priority").value;
+    let errorMsg = document.getElementById("errorMsg");
+
+    let text = input.value.trim();
+
+    // Clear previous error
+    errorMsg.innerText = "";
+
+    if (text === "") {
+        errorMsg.innerText = "Task cannot be empty!";
+        return;
+    }
+
+    let task = { text, priority, completed: false };
+    tasks.push(task);
+
+    renderTask(text, priority, false);
+    saveTasks();
+
+    input.value = "";
+}
+
+function renderTask(text, priority, completed) {
+    let li = document.createElement("li");
+    li.classList.add(priority);
+
+    let span = document.createElement("span");
+    span.innerText = text;
+
+    if (completed) span.classList.add("completed");
+
+    span.onclick = function() {
+        span.classList.toggle("completed");
+    };
+
+    let del = document.createElement("span");
+    del.innerText = "X";
+    del.className = "delete";
+
+    del.onclick = function() {
+        li.remove();
+    };
+
+    li.appendChild(span);
+    li.appendChild(del);
+
+    document.getElementById("taskList").appendChild(li);
+}
+
+window.onload = loadTasks;
+
+
+</script>
+
+</body>
+</html>
