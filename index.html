@@ -1,210 +1,231 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Task Manager (Beta)</title>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script type="text/javascript">
+			(function (c, l, a, r, i, t, y) {
+				c[a] =
+					c[a] ||
+					function () {
+						(c[a].q = c[a].q || []).push(arguments);
+					};
+				t = l.createElement(r);
+				t.async = 1;
+				t.src = "https://www.clarity.ms/tag/" + i;
+				y = l.getElementsByTagName(r)[0];
+				y.parentNode.insertBefore(t, y);
+			})(window, document, "clarity", "script", "w0lehl5t5m");
+		</script>
+		<title>Task Manager (Beta)</title>
 
-<style>
-* { box-sizing: border-box; }
+		<style>
+			* {
+				box-sizing: border-box;
+			}
 
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f9;
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-}
+			body {
+				font-family: Arial, sans-serif;
+				background: #f4f6f9;
+				margin: 0;
+				padding: 20px;
+				display: flex;
+				justify-content: center;
+			}
 
-.app {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
+			.app {
+				background: white;
+				padding: 20px;
+				border-radius: 12px;
+				width: 100%;
+				max-width: 400px;
+				box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+			}
 
-h2 {
-    text-align: center;
-}
+			h2 {
+				text-align: center;
+			}
 
-input, select, textarea {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
-    font-size: 16px;
-}
+			input,
+			select,
+			textarea {
+				width: 100%;
+				padding: 12px;
+				border-radius: 8px;
+				border: 1px solid #ccc;
+				margin-bottom: 10px;
+				font-size: 16px;
+			}
 
-button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    background: #4CAF50;
-    color: white;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-}
+			button {
+				width: 100%;
+				padding: 12px;
+				border: none;
+				background: #4caf50;
+				color: white;
+				border-radius: 8px;
+				font-size: 16px;
+				cursor: pointer;
+			}
 
-button:hover {
-    background: #43a047;
-}
+			button:hover {
+				background: #43a047;
+			}
 
-ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
-}
+			ul {
+				list-style: none;
+				padding: 0;
+				margin-top: 20px;
+			}
 
-li {
-    padding: 12px;
-    margin-bottom: 10px;
-    background: #eee;
-    border-radius: 8px;
-}
+			li {
+				padding: 12px;
+				margin-bottom: 10px;
+				background: #eee;
+				border-radius: 8px;
+			}
 
-.task-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+			.task-row {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
 
-.completed {
-    text-decoration: line-through;
-    color: gray;
-}
+			.completed {
+				text-decoration: line-through;
+				color: gray;
+			}
 
-.high { border-left: 5px solid red; }
-.medium { border-left: 5px solid orange; }
-.low { border-left: 5px solid green; }
+			.high {
+				border-left: 5px solid red;
+			}
+			.medium {
+				border-left: 5px solid orange;
+			}
+			.low {
+				border-left: 5px solid green;
+			}
 
-.delete {
-    background: red;
-    color: white;
-    padding: 6px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-}
+			.delete {
+				background: red;
+				color: white;
+				padding: 6px 10px;
+				border-radius: 6px;
+				cursor: pointer;
+			}
 
-#errorMsg {
-    color: red;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
+			#errorMsg {
+				color: red;
+				font-size: 14px;
+				margin-bottom: 10px;
+			}
 
-@media (max-width: 480px) {
-    body { padding: 10px; }
-}
-</style>
+			@media (max-width: 480px) {
+				body {
+					padding: 10px;
+				}
+			}
+		</style>
+	</head>
 
-</head>
+	<body>
+		<div class="app">
+			<h2>Task Manager (Beta)</h2>
 
-<body>
+			<input type="text" id="taskInput" placeholder="Enter task" />
+			<p id="errorMsg"></p>
 
-<div class="app">
-    <h2>Task Manager (Beta)</h2>
+			<select id="priority">
+				<option value="low">Low Priority</option>
+				<option value="medium">Medium Priority</option>
+				<option value="high">High Priority</option>
+			</select>
 
-    <input type="text" id="taskInput" placeholder="Enter task">
-    <p id="errorMsg"></p>
+			<button onclick="addTask()">Add Task</button>
 
-    <select id="priority">
-        <option value="low">Low Priority</option>
-        <option value="medium">Medium Priority</option>
-        <option value="high">High Priority</option>
-    </select>
+			<ul id="taskList"></ul>
 
-    <button onclick="addTask()">Add Task</button>
+			<!-- 🔹 Feedback Section -->
+			<h3>Feedback</h3>
 
-    <ul id="taskList"></ul>
+			<form action="https://formspree.io/f/yourID" method="POST">
+				<textarea
+					name="feedback"
+					placeholder="Enter your feedback here..."
+					required
+				>
+				</textarea>
 
-    <!-- 🔹 Feedback Section -->
-    <h3>Feedback</h3>
+				<input type="email" name="email" placeholder="Your email (optional)" />
 
-    <form action="https://formspree.io/f/yourID" method="POST">
-        <textarea 
-            name="feedback" 
-            placeholder="Enter your feedback here..." 
-            required>
-        </textarea>
+				<button type="submit">Submit Feedback</button>
+			</form>
+		</div>
 
-        <input 
-            type="email" 
-            name="email" 
-            placeholder="Your email (optional)">
+		<script>
+			let tasks = [];
 
-        <button type="submit">Submit Feedback</button>
-    </form>
-</div>
+			function saveTasks() {
+				localStorage.setItem("tasks", JSON.stringify(tasks));
+			}
 
-<script>
-let tasks = [];
+			function loadTasks() {
+				let stored = localStorage.getItem("tasks");
+				if (stored) {
+					tasks = JSON.parse(stored);
+					tasks.forEach((t) => renderTask(t.text, t.priority, t.completed));
+				}
+			}
 
-function saveTasks() {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-}
+			function addTask() {
+				let input = document.getElementById("taskInput");
+				let priority = document.getElementById("priority").value;
+				let errorMsg = document.getElementById("errorMsg");
 
-function loadTasks() {
-    let stored = localStorage.getItem("tasks");
-    if (stored) {
-        tasks = JSON.parse(stored);
-        tasks.forEach(t => renderTask(t.text, t.priority, t.completed));
-    }
-}
+				let text = input.value.trim();
+				errorMsg.innerText = "";
 
-function addTask() {
-    let input = document.getElementById("taskInput");
-    let priority = document.getElementById("priority").value;
-    let errorMsg = document.getElementById("errorMsg");
+				if (text === "") {
+					errorMsg.innerText = "Task cannot be empty!";
+					return;
+				}
 
-    let text = input.value.trim();
-    errorMsg.innerText = "";
+				let task = { text, priority, completed: false };
+				tasks.push(task);
 
-    if (text === "") {
-        errorMsg.innerText = "Task cannot be empty!";
-        return;
-    }
+				renderTask(text, priority, false);
+				saveTasks();
 
-    let task = { text, priority, completed: false };
-    tasks.push(task);
+				input.value = "";
+			}
 
-    renderTask(text, priority, false);
-    saveTasks();
+			function renderTask(text, priority, completed) {
+				let li = document.createElement("li");
+				li.classList.add(priority);
 
-    input.value = "";
-}
-
-function renderTask(text, priority, completed) {
-    let li = document.createElement("li");
-    li.classList.add(priority);
-
-    li.innerHTML = `
+				li.innerHTML = `
         <div class="task-row">
             <span onclick="toggleComplete(this)">${text}</span>
             <span class="delete" onclick="deleteTask(this)">X</span>
         </div>
     `;
 
-    if (completed) {
-        li.querySelector("span").classList.add("completed");
-    }
+				if (completed) {
+					li.querySelector("span").classList.add("completed");
+				}
 
-    document.getElementById("taskList").appendChild(li);
-}
+				document.getElementById("taskList").appendChild(li);
+			}
 
-function toggleComplete(element) {
-    element.classList.toggle("completed");
-}
+			function toggleComplete(element) {
+				element.classList.toggle("completed");
+			}
 
-function deleteTask(element) {
-    element.parentElement.parentElement.remove();
-}
+			function deleteTask(element) {
+				element.parentElement.parentElement.remove();
+			}
 
-window.onload = loadTasks;
-</script>
-
-</body>
+			window.onload = loadTasks;
+		</script>
+	</body>
 </html>
